@@ -34,6 +34,14 @@ spec:
           env:
             - name: DATA_DIR
               value: /data
+            - name: KUBEVIRT_NAMESPACE
+              value: kubevirt
+            - name: HCO_NAMESPACE
+              value: ""
+            - name: NAMESPACE
+              value: default
+            - name: NAMESPACE
+              value: default
           volumeMounts:
             - name: datadir
               mountPath: /data

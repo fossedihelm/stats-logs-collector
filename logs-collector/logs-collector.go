@@ -15,23 +15,16 @@ var logger = log.New(os.Stderr, "logs-collector: ", log.Lshortfile|log.Ldate|log
 func main() {
 
 	var err error
-	namespace := "default"
-	if ns := os.Getenv("NAMESPACE"); ns != "" {
-		namespace = ns
+	if ns := os.Getenv("NAMESPACE"); ns == "" {
+		os.Setenv("NAMESPACE", "default")
 	}
-	kv_namespace := "kubevirt"
-	if ns := os.Getenv("KUBEVIRT_NAMESPACE"); ns != "" {
-		kv_namespace = ns
+
+	if ns := os.Getenv("KUBEVIRT_NAMESPACE"); ns == "" {
+		os.Setenv("KUBEVIRT_NAMESPACE", "kubevirt")
 	}
-	hco_namespace := ""
-	verbosityNamespace := kv_namespace
-	if ns := os.Getenv("HCO_NAMESPACE"); ns != "" {
-		hco_namespace = ns
-		verbosityNamespace = hco_namespace
-	}
-	dataDir := "/logs_collector"
-	if dd := os.Getenv("DATA_DIR"); dd != "" {
-		dataDir = dd
+
+	if dd := os.Getenv("DATA_DIR"); dd == "" {
+		os.Setenv("DATA_DIR", "/logs-collector")
 	}
 	pollingIntervalMins := 60
 	if mins := os.Getenv("POLL_INTERVAL_MINS"); mins != "" {
@@ -41,7 +34,7 @@ func main() {
 		}
 	}
 
-	cmd := exec.Command("./increase-verbosity.sh", "-n", verbosityNamespace)
+	cmd := exec.Command("./increase-verbosity.sh")
 	out, err := cmd.CombinedOutput()
 	logger.Printf(string(out))
 	if err != nil {
@@ -51,14 +44,14 @@ func main() {
 	ticker := time.NewTicker(time.Minute * time.Duration(pollingIntervalMins))
 	done := make(chan bool)
 
-	collectLogs(namespace, dataDir, kv_namespace)
+	collectLogs()
 	go func() {
 		for {
 			select {
 			case <-done:
 				os.Exit(0)
 			case <-ticker.C:
-				collectLogs(namespace, dataDir, kv_namespace)
+				collectLogs()
 			}
 		}
 
@@ -78,9 +71,9 @@ func main() {
 
 }
 
-func collectLogs(namespace, directory, kv_namespace string) {
+func collectLogs() {
 	logger.Println("Start logs-collector")
-	cmd := exec.Command("./logs-collector.sh", "-n", namespace, "-d", directory, "-kn", kv_namespace)
+	cmd := exec.Command("./logs-collector.sh")
 	out, err := cmd.CombinedOutput()
 	logger.Printf(string(out))
 	if err != nil {
