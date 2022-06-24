@@ -1,7 +1,7 @@
 FROM golang:1.18 as builder
 
 WORKDIR /go/src/memstat
-COPY memstat/ ./
+COPY ./ ./
 RUN go build
 RUN chown 1001:1001 memstat
 
