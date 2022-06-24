@@ -1,0 +1,69 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: stats-logs-collector-data-dir-claim
+spec:
+  storageClassName: nfs
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 2Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: logs-collector
+  labels:
+    app: logs-collector
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: logs-collector
+  template:
+    metadata:
+      labels:
+        app: logs-collector
+    spec:
+      serviceAccountName: logs-collector
+      containers:
+        - name: logs-collector
+          image: quay.io/ffossemo/logs-collector:latest
+          env:
+            - name: DATA_DIR
+              value: /data
+          volumeMounts:
+            - name: datadir
+              mountPath: /data
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: [ "ALL" ]
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+        - name: memstats
+          image: quay.io/acardace/stat-collector:latest
+          env:
+            - name: DATA_DIR
+              value: /data
+            - name: HTTP_PORT
+              value: "8099"
+          ports:
+            - containerPort: 8099
+          volumeMounts:
+            - name: datadir
+              mountPath: /data
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: [ "ALL" ]
+            runAsNonRoot: true
+            seccompProfile:
+              type: RuntimeDefault
+      volumes:
+        - name: datadir
+          persistentVolumeClaim:
+            claimName: stats-logs-collector-data-dir-claim
