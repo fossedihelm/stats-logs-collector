@@ -11,11 +11,13 @@ push:
 	docker push quay.io/acardace/memstat:latest
 
 install:
-	-kubectl create -f ./logs-collector/logs-collector-deployment.yaml
-	-kubectl create -f ./memstat/deploy.yaml
+	-kubectl create -f ./logs-collector/rbac.yaml
+	-kubectl create -f ./memstat/rbac.yaml
+	-kubectl create -f ./deployment.yaml
 
 
 uninstall:
-	-kubectl delete -f ./logs-collector/logs-collector-deployment.yaml
-	-kubectl delete -f ./memstat/deploy.yaml
+	-kubectl delete -f ./logs-collector/rbac.yaml
+	-kubectl delete -f ./memstat/rbac.yaml
+	-kubectl delete -f ./deployment.yaml
 

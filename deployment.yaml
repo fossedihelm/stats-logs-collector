@@ -9,7 +9,7 @@ spec:
   volumeMode: Filesystem
   resources:
     requests:
-      storage: 2Gi
+      storage: 10Gi
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -30,7 +30,7 @@ spec:
       serviceAccountName: logs-collector
       containers:
         - name: logs-collector
-          image: quay.io/ffossemo/logs-collector:latest
+          image: quay.io/acardace/logs-collector:latest
           env:
             - name: DATA_DIR
               value: /data
