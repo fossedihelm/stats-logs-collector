@@ -1,6 +1,6 @@
 default: build
 
-all: build push install
+all: build push uninstall install
 
 build:
 	cd logs-collector && docker build -t quay.io/acardace/logs-collector:latest .
