@@ -21,3 +21,9 @@ uninstall:
 	-kubectl delete -f ./memstat/rbac.yaml
 	-kubectl delete -f ./deployment.yaml
 
+inspect:
+	kubectl create -f ./stats-logs-inspector.yaml
+	kubectl wait --for=condition=ready pod stats-logs-inspector --timeout=30s
+	kubectl attach -ti stats-logs-inspector
+	kubectl delete -f ./stats-logs-inspector.yaml
+
