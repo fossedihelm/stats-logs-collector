@@ -7,8 +7,8 @@ then
   exit 0
 fi
 
-kubevirt_name=$(kubectl get -n $namespace kubevirt -o json | jq -r .items[0].metadata.name)
-kubectl patch -n $namespace kubevirt $kubevirt_name -p='[{"op": "add", "path": "/spec/configuration/developerConfiguration/logVerbosity", "value":{"virtLauncher":4,"virtHandler":4}}]' --type='json'
+kubevirt_name=$(kubectl get -n $KUBEVIRT_NAMESPACE kubevirt -o json | jq -r .items[0].metadata.name)
+kubectl patch -n $KUBEVIRT_NAMESPACE kubevirt $kubevirt_name -p='[{"op": "add", "path": "/spec/configuration/developerConfiguration/logVerbosity", "value":{"virtLauncher":4,"virtHandler":4}}]' --type='json'
 
 
 
