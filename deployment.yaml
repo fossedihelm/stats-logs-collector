@@ -40,8 +40,6 @@ spec:
               value: ""
             - name: NAMESPACE
               value: default
-            - name: NAMESPACE
-              value: default
           volumeMounts:
             - name: datadir
               mountPath: /data
