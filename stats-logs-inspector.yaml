@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: stats-logs-inspector
+spec:
+  containers:
+  - args:
+    - bash
+    image: debian:11
+    name: bash
+    stdin: true
+    stdinOnce: true
+    tty: true
+    volumeMounts:
+    - mountPath: /data
+      name: datadir
+  volumes:
+  - name: datadir
+    persistentVolumeClaim:
+      claimName: stats-logs-collector-data-dir-claim
