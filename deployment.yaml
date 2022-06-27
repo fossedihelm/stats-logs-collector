@@ -3,7 +3,6 @@ kind: PersistentVolumeClaim
 metadata:
   name: stats-logs-collector-data-dir-claim
 spec:
-  storageClassName: nfs
   accessModes:
     - ReadWriteOnce
   volumeMode: Filesystem
