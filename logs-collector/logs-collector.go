@@ -77,6 +77,6 @@ func collectLogs() {
 	out, err := cmd.CombinedOutput()
 	logger.Printf(string(out))
 	if err != nil {
-		logger.Printf("an error occurred: %v", err)
+		logger.Printf("an error occurred: ", err)
 	}
 }
