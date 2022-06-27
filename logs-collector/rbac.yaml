@@ -39,7 +39,7 @@ rules:
   - apiGroups:
       - hco.kubevirt.io
     resources:
-      - hco
+      - hyperconvergeds
     verbs:
       - get
       - list

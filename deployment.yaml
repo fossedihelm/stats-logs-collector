@@ -35,9 +35,9 @@ spec:
             - name: DATA_DIR
               value: /data
             - name: KUBEVIRT_NAMESPACE
-              value: kubevirt
+              value: openshift-cnv
             - name: HCO_NAMESPACE
-              value: ""
+              value: openshift-cnv
             - name: NAMESPACE
               value: default
           volumeMounts:
