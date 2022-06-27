@@ -37,16 +37,16 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    app.kubernetes.io/component: vmi-stat-collector
-    app.kubernetes.io/managed-by: vmi-stat-collector
-    app: vmi-stat-collector
-  name: vmi-stat-collector
+    app.kubernetes.io/component: stats-logs-collector
+    app.kubernetes.io/managed-by: stats-logs-collector
+    app: stats-logs-collector
+  name: stats-logs-collector
 spec:
   ports:
   - port: 8099
     protocol: TCP
     targetPort: 8099
   selector:
-    app: vmi-stat-collector
+    app: stats-logs-collector
 
 

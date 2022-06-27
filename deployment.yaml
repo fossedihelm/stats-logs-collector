@@ -13,18 +13,18 @@ spec:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: logs-collector
+  name: stats-logs-collector
   labels:
-    app: logs-collector
+    app: stats-logs-collector
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: logs-collector
+      app: stats-logs-collector
   template:
     metadata:
       labels:
-        app: logs-collector
+        app: stats-logs-collector
     spec:
       serviceAccountName: logs-collector
       securityContext:
