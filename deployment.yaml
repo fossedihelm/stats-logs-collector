@@ -27,6 +27,8 @@ spec:
         app: logs-collector
     spec:
       serviceAccountName: logs-collector
+      securityContext:
+        fsGroup: 1001
       containers:
         - name: logs-collector
           image: quay.io/acardace/logs-collector:latest
