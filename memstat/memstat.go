@@ -268,9 +268,9 @@ func main() {
 
 	appConf := newConfig()
 
-	_ = os.Mkdir(filepath.Join(appConf.dataDir, MemStatDir), 0755)
+	err = os.Mkdir(filepath.Join(appConf.dataDir, MemStatDir), 0755)
 	if err != nil {
-		logger.Println(err)
+		logger.Fatal(err)
 	}
 	csvPath := filepath.Join(appConf.dataDir, MemStatDir, "mem-stats.csv")
 	csvFile, err := NewCsvFile(csvPath)
