@@ -6,11 +6,11 @@ build:
 	cd logs-collector && docker build -t quay.io/acardace/logs-collector:latest .
 	cd memstat && docker build -t quay.io/acardace/memstat:latest .
 
-push:
+push: build
 	docker push quay.io/acardace/logs-collector:latest
 	docker push quay.io/acardace/memstat:latest
 
-install:
+install: push
 	-kubectl create -f ./logs-collector/rbac.yaml
 	-kubectl create -f ./memstat/rbac.yaml
 	-kubectl create -f ./deployment.yaml
