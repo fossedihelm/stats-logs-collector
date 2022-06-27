@@ -30,6 +30,7 @@ spec:
       containers:
         - name: logs-collector
           image: quay.io/acardace/logs-collector:latest
+          imagePullPolicy: Always
           env:
             - name: DATA_DIR
               value: /data
@@ -49,8 +50,9 @@ spec:
             runAsNonRoot: true
             seccompProfile:
               type: RuntimeDefault
-        - name: memstats
-          image: quay.io/acardace/stat-collector:latest
+        - name: memstat
+          image: quay.io/acardace/memstat:latest
+          imagePullPolicy: Always
           env:
             - name: DATA_DIR
               value: /data
