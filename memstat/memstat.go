@@ -270,7 +270,7 @@ func main() {
 
 	err = os.Mkdir(filepath.Join(appConf.dataDir, MemStatDir), 0755)
 	if err != nil {
-		logger.Fatal(err)
+		logger.Println(err)
 	}
 	csvPath := filepath.Join(appConf.dataDir, MemStatDir, "mem-stats.csv")
 	csvFile, err := NewCsvFile(csvPath)
