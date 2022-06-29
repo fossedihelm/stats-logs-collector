@@ -10,7 +10,7 @@ push: build
 	docker push quay.io/acardace/logs-collector:latest
 	docker push quay.io/acardace/memstat:latest
 
-install: push
+install:
 	-kubectl create -f ./logs-collector/rbac.yaml
 	-kubectl create -f ./memstat/rbac.yaml
 	-kubectl create -f ./deployment.yaml
