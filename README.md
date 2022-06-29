@@ -1,6 +1,6 @@
 # Stats-log-collector
 
-**Stats-log-collector** is a deployment that could be used to monitor RSS 
+**Stats-log-collector** is a deployment that could be used to monitor RSS
 and collect logs of the virtual machine inside a cluster [Kubernetes][k8s] that uses
 [Kubevirt][kubevirt].
 
@@ -34,7 +34,7 @@ in the [deployment.yaml](./deployment.yaml) file:
 ### memstats
 
 memstats collects RSS data of all the vms running in a specified _namespace_.
-It consists in a basic application that runs every `POLL_INTERVAL_SECS` and 
+It consists in a basic application that runs every `POLL_INTERVAL_SECS` and
 get RSS data, adding them to a _csv_ file. This file will be stored inside a
 directory named `mem-stats.csv` under `DATA_DIR` folder.
 
@@ -45,7 +45,7 @@ in the [deployment.yaml](./deployment.yaml) file:
 - `NAMESPACE` _namespace_ of the vms you want to monitor (you can monitor only one _namespace_)
    - default: `default`
 - `POLL_INTERVAL_SECS` every how many seconds you want the data collection to run
-   - default: `180`
+   - default: `300`
 - `HTTP_PORT` port of the webserver that can be used to retrieve the _csv_ file
   - default: `8099`
 
@@ -57,7 +57,7 @@ the commands should be executed.
 After customizing the `env` variables you can install the **stats-logs-collector**
 by simply run:
 ```shell
-make install 
+make install
 ```
 
 To uninstall it:
@@ -86,7 +86,7 @@ curl -k http://localhost:<local_port> > <path_to_local_file>
 ```
 
 
-### Read logs-collector data ### 
+### Read logs-collector data ###
 
 To read the logs you can simply go inside the pod and read it navigating through `DATA_DIR` folder:
 ```shell
