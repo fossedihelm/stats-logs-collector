@@ -35,7 +35,7 @@ const (
 
 	defaultNamespaceConfig        = "default"
 	defaultDataDirConfig          = "/data"
-	defaultPollIntervalSecsConfig = 5
+	defaultPollIntervalSecsConfig = 60 * 3
 	defaultHttpPortConfig         = 8099
 )
 
