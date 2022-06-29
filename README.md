@@ -45,11 +45,11 @@ in the [deployment.yaml](./deployment.yaml) file:
 - `NAMESPACE` _namespace_ of the vms you want to monitor (you can monitor only one _namespace_)
    - default: `default`
 - `POLL_INTERVAL_SECS` every how many seconds you want the data collection to run
-   - default: `5`
+   - default: `180`
 - `HTTP_PORT` port of the webserver that can be used to retrieve the _csv_ file
   - default: `8099`
 
-### Usage
+## Usage
 
 NB: it uses the `KUBECONFIG` env var on your local system to determine in which cluster
 the commands should be executed.
@@ -121,8 +121,3 @@ Stats-logs-collector is distributed under the
    [k8s]: https://kubernetes.io
    [kubevirt]: https://kubevirt.io
    [hco]: https://github.com/kubevirt/hyperconverged-cluster-operator
-   [crd]: https://kubernetes.io/docs/tasks/access-kubernetes-api/extend-api-custom-resource-definitions/
-   [ovirt]: https://www.ovirt.org
-   [cockpit]: https://cockpit-project.org/
-   [libvirt]: https://www.libvirt.org
-   [kubevirt-ansible]: https://github.com/kubevirt/kubevirt-ansible
