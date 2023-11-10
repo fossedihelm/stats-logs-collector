@@ -3,20 +3,26 @@ default: build
 all: build push uninstall install
 
 build:
-	cd logs-collector && docker build -t quay.io/acardace/logs-collector:latest .
-	cd memstat && docker build -t quay.io/acardace/memstat:latest .
+	REGISTRY=${REGISTRY:-quay.io/acardace}
+	cd logs-collector && docker build -t ${REGISTRY}/logs-collector:latest .
+	cd memstat && docker build -t ${REGISTRY}/memstat:latest .
 
 push: build
-	docker push quay.io/acardace/logs-collector:latest
-	docker push quay.io/acardace/memstat:latest
+	REGISTRY=${REGISTRY:-quay.io/acardace}
+	docker push ${REGISTRY}/logs-collector:latest
+	docker push ${REGISTRY}/memstat:latest
 
-install:
+install: generate
 	-kubectl create -f ./logs-collector/rbac.yaml
 	-kubectl create -f ./memstat/rbac.yaml
-	-kubectl create -f ./deployment.yaml
+	-kubectl create -f ./_out/deployment_generated.yaml
 
-
-uninstall:
+uninstall: generate
 	-kubectl delete -f ./logs-collector/rbac.yaml
 	-kubectl delete -f ./memstat/rbac.yaml
-	-kubectl delete -f ./deployment.yaml
+	-kubectl delete -f ./_out/deployment_generated.yaml
+
+generate:
+	REGISTRY=${REGISTRY:-quay.io/acardace}
+	rm _out/* -rf
+	sed "s#<REGISTRY>#${REGISTRY}#" deployment.yaml > _out/deployment_generated.yaml
