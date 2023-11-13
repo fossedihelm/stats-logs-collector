@@ -37,6 +37,7 @@ const (
 	defaultDataDirConfig          = "/data"
 	defaultPollIntervalSecsConfig = 60 * 5
 	defaultHttpPortConfig         = 8099
+	defaultProcessName            = "virt-launcher"
 )
 
 var (
@@ -44,6 +45,7 @@ var (
 
 	csvHeader = []string{
 		"vmName",
+		"process",
 		"timestamp",
 		"RSS",
 		"RssAnon",
@@ -69,6 +71,7 @@ type config struct {
 	dataDir             string
 	pollingIntervalSecs int
 	httpPort            int
+	processName         string
 }
 
 func newConfig() *config {
@@ -88,12 +91,16 @@ func newConfig() *config {
 			logger.Fatal(err)
 		}
 	}
-	httpPort := 8099
+	httpPort := defaultHttpPortConfig
 	if hp := os.Getenv("HTTP_PORT"); hp != "" {
 		httpPort, err = strconv.Atoi(hp)
 		if err != nil {
 			logger.Fatal(err)
 		}
+	}
+	processName := defaultProcessName
+	if pn := os.Getenv("PROCESS_NAME"); pn != "" {
+		processName = pn
 	}
 
 	return &config{
@@ -101,6 +108,7 @@ func newConfig() *config {
 		dataDir:             dataDir,
 		pollingIntervalSecs: pollingIntervalSecs,
 		httpPort:            httpPort,
+		processName:         processName,
 	}
 }
 
@@ -160,13 +168,14 @@ func (c *csvFile) IsAppendMode() bool {
 	return c.appendMode
 }
 
-func writeToCSV(pod *v1.Pod, stats map[string]string, w *csvFile) {
+func writeToCSV(pod *v1.Pod, conf *config, stats map[string]string, w *csvFile) {
 	record := make([]string, len(csvHeader))
 
 	// vmName
 	record[0] = pod.Name
+	record[1] = conf.processName
 	// timestamp
-	record[1] = strconv.FormatInt(time.Now().UTC().Unix(), 10)
+	record[2] = strconv.FormatInt(time.Now().UTC().Unix(), 10)
 	// total RSS
 	rssAnon, err := strconv.Atoi(stats["RssAnon"])
 	if err != nil {
@@ -176,10 +185,10 @@ func writeToCSV(pod *v1.Pod, stats map[string]string, w *csvFile) {
 	if err != nil {
 		logger.Printf("could not get RssFile: %v", err)
 	}
-	record[2] = strconv.Itoa(rssAnon + rssFile)
+	record[3] = strconv.Itoa(rssAnon + rssFile)
 
-	for i, k := range csvHeader[3:] {
-		record[i+3] = stats[k]
+	for i, k := range csvHeader[4:] {
+		record[i+4] = stats[k]
 	}
 
 	if err := w.Write(record); err != nil {
@@ -300,10 +309,10 @@ func main() {
 		}
 
 		for _, pod := range pods.Items {
-			cmd := []string{"pidof", "virt-launcher"}
+			cmd := []string{"pidof", appConf.processName}
 			pid, err := execCommandOnPod(clientset, config, &pod, cmd)
 			if err != nil {
-				logger.Printf("failed getting virt-launcher pid for %s: %v", pod.Name, err)
+				logger.Printf("failed getting %s pid for %s: %v", appConf.processName, pod.Name, err)
 				continue
 			}
 
@@ -315,7 +324,7 @@ func main() {
 			}
 
 			statsMap := parseProcStatus(output)
-			writeToCSV(&pod, statsMap, csvFile)
+			writeToCSV(&pod, appConf, statsMap, csvFile)
 		}
 
 		select {

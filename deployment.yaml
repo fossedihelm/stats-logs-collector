@@ -31,7 +31,7 @@ spec:
         fsGroup: 1001
       containers:
         - name: logs-collector
-          image: quay.io/acardace/logs-collector:latest
+          image: <REGISTRY>/logs-collector:latest
           imagePullPolicy: Always
           env:
             - name: DATA_DIR
@@ -53,13 +53,17 @@ spec:
             seccompProfile:
               type: RuntimeDefault
         - name: memstat
-          image: quay.io/acardace/memstat:latest
+          image: <REGISTRY>/memstat:latest
           imagePullPolicy: Always
           env:
             - name: DATA_DIR
               value: /data
             - name: HTTP_PORT
               value: "8099"
+            - name: NAMESPACE
+              value: default
+            - name: PROCESS_NAME
+              value: "virt-launcher"
           ports:
             - containerPort: 8099
           volumeMounts:

@@ -9,7 +9,7 @@ import (
 )
 
 func main() {
-	// user your path
+	// use your path
 	csvFile, err := os.Open("/home/fossedihelm/memstat.csv")
 	if err != nil {
 		fmt.Println(err)
@@ -22,14 +22,14 @@ func main() {
 	if err != nil {
 		fmt.Println(err)
 	}
-	// user your path
+	// use your path
 	csvPath := filepath.Join("/home/fossedihelm/", "cleaned.csv")
 	f, err := os.Create(csvPath)
 	if err != nil {
 		fmt.Println("Error")
 		os.Exit(1)
 	}
-	defer csvFile.Close()
+	defer f.Close()
 	writer := csv.NewWriter(f)
 	defer writer.Flush()
 
